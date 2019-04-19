@@ -1,0 +1,17 @@
+{
+    "name": "yichu/pcspider",
+    "description": "PCSpider - this is a PHP crawler project that crawls court reports and referee documents from several websites.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "谢宇轩",
+            "email": "xieyuxuan@netpas.co"
+        }
+    ],
+    "require": {
+        "symfony/console": "^4.2",
+        "guzzlehttp/guzzle": "^6.3",
+        "illuminate/database": "^5.8",
+        "monolog/monolog": "^1.24"
+    }
+}
