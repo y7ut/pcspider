@@ -13,5 +13,10 @@
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
     }
 }
