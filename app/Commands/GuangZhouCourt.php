@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Common\Model\Report;
 use App\Spider\DemoSpider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

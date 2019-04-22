@@ -8,7 +8,7 @@
 use App\Commands\GuangZhouCourt;
 use Symfony\Component\Console\Application;
 
-$settings = require __DIR__ . '/settings.php';
+$settings = require __DIR__.'/settings.php';
 
 // 初始化Eloquent ORM
 $capsule = new \Illuminate\Database\Capsule\Manager();

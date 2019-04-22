@@ -19,42 +19,44 @@ class DemoSpider extends BaseSpider
     /**
      * 执行抓取运行操作，将每个爬虫特有的逻辑，在这个方法中体现
      *
-     * @return DemoSpider
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @return DemoSpider
      */
-    public function run() :DemoSpider
+    public function run(): DemoSpider
     {
-        if(is_null(static::$httpClient)){
+        if (null === static::$httpClient) {
             throw new \RuntimeException('Please setup Spider first');
         }
 
-        $firstResponse  = static::$httpClient->request('GET','data/front/fyggFront!ktggListAjax.action',[
+        $firstResponse = static::$httpClient->request('GET', 'data/front/fyggFront!ktggListAjax.action', [
             'query' => [
                 'pageNo' => 1,
-                'rowSize' => 100
-            ]
+                'rowSize' => 100,
+            ],
         ]);
 
         $data = json_decode($firstResponse->getBody()->getContents(), true)['attach'];
-        foreach ($data['list'] as $item){
+        foreach ($data['list'] as $item) {
             static::$storage[] = $item;
         }
         $page = $data['pageCount'];
 
-        for($i = 2;$i <= $page; $i++){
-            $response  = static::$httpClient->request('GET','data/front/fyggFront!ktggListAjax.action',[
+        for ($i = 2; $i <= $page; ++$i) {
+            $response = static::$httpClient->request('GET', 'data/front/fyggFront!ktggListAjax.action', [
                 'query' => [
                     'pageNo' => $i,
-                    'rowSize' => 100
-                ]
+                    'rowSize' => 100,
+                ],
             ]);
             echo $i;
             $data = json_decode($response->getBody()->getContents(), true)['attach']['list'];
 
-            foreach ($data as $item){
+            foreach ($data as $item) {
                 static::$storage[] = $item;
             }
         }
+
         return $this;
     }
 }

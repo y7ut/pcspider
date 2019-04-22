@@ -5,8 +5,10 @@
  * Date: 2019/4/19
  * Time: 18:48
  */
+
 namespace App\Common;
 
+use App\Common\Model\Report;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,7 +29,6 @@ class BaseSpider
     public function __construct(Client $client)
     {
         self::$httpClient = $client;
-
     }
 
     /**
@@ -35,13 +36,13 @@ class BaseSpider
      *
      * @return BaseSpider
      */
-    public static function setup() :BaseSpider
+    public static function setup(): BaseSpider
     {
         $client = new Client([
             // Base URI is used with relative requests
             'base_uri' => static::SPIDER_HTTP_HOST,
             // You can set any number of default request options.
-            'timeout'  => static::TIME_OUT,
+            'timeout' => static::TIME_OUT,
         ]);
 
         $spider = new static($client);
@@ -53,16 +54,18 @@ class BaseSpider
      * 直接打印抓取结果，可链式调用
      *
      * @param OutputInterface $output
+     *
      * @return BaseSpider
      */
-    public function dd(OutputInterface $output) :BaseSpider
+    public function dd(OutputInterface $output): BaseSpider
     {
-        foreach (static::$storage as $item){
+        foreach (static::$storage as $item) {
             $output->writeln('----------------------');
             $output->writeln(json_encode($item, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         }
         $output->writeln('----------------------');
         $output->writeln(count(static::$storage));
+
         return $this;
     }
 
@@ -71,9 +74,21 @@ class BaseSpider
      *
      * @return BaseSpider
      */
-    public function save() :BaseSpider
+    public function save(): BaseSpider
     {
-        // TODO :未完成逻辑
+
+        foreach (static::$storage as $item) {
+            $report = Report::firstOrNew([
+               'case_number' => $item['AH'],
+           ]);
+            $report->case_account = $item['AY'];
+            $report->court = $item['FYMC'];
+            $report->court_time = $item['KTKSSJ'];
+            $report->court_address = $item['KTDD'];
+            $report->court_judge = $item['KTZSFG'];
+            $report->save();
+        }
+
         return $this;
     }
 }
