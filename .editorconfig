@@ -1,0 +1,17 @@
+# 本文件用于统一不同 IDE 和编辑器的行为。
+# 详情请参考 http://EditorConfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[{*.json,*.yaml}]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
