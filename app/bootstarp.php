@@ -5,7 +5,8 @@
  * Date: 2019/4/22
  * Time: 11:37
  */
-use App\Commands\GuangZhouCourt;
+use App\Commands\GuangzhouCourt;
+use App\Commands\ShanghaiCourt;
 use Symfony\Component\Console\Application;
 
 $settings = require __DIR__.'/settings.php';
@@ -27,4 +28,5 @@ $capsule->bootEloquent();
 $application = new Application();
 
 //注册命令
-$application->add(new GuangZhouCourt());
+$application->add(new GuangzhouCourt());
+$application->add(new ShanghaiCourt());

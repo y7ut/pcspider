@@ -9,21 +9,22 @@
 namespace App\Spider;
 
 use App\Common\BaseSpider;
+use App\Common\Model\Report;
 
-class DemoSpider extends BaseSpider
+class GuangzhouSpider extends BaseSpider
 {
     public const SPIDER_HTTP_HOST = 'http://www.gipc.gov.cn/';
 
-    public const SPIDER_NAME = 'DemoSpider';
+    public const SPIDER_NAME = 'GuangzhouSpider';
 
     /**
      * 执行抓取运行操作，将每个爬虫特有的逻辑，在这个方法中体现
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
-     * @return DemoSpider
+     * @return GuangzhouSpider
      */
-    public function run(): DemoSpider
+    public function run(): GuangzhouSpider
     {
         if (null === static::$httpClient) {
             throw new \RuntimeException('Please setup Spider first');
@@ -32,7 +33,7 @@ class DemoSpider extends BaseSpider
         $firstResponse = static::$httpClient->request('GET', 'data/front/fyggFront!ktggListAjax.action', [
             'query' => [
                 'pageNo' => 1,
-                'rowSize' => 100,
+                'rowSize' => 50,
             ],
         ]);
 
@@ -43,18 +44,47 @@ class DemoSpider extends BaseSpider
         $page = $data['pageCount'];
 
         for ($i = 2; $i <= $page; ++$i) {
+            $this->show_status($i,$page,'获取公告目录成功，开始尝试读取','');
             $response = static::$httpClient->request('GET', 'data/front/fyggFront!ktggListAjax.action', [
                 'query' => [
                     'pageNo' => $i,
-                    'rowSize' => 100,
+                    'rowSize' => 50,
                 ],
             ]);
-            echo $i;
             $data = json_decode($response->getBody()->getContents(), true)['attach']['list'];
 
             foreach ($data as $item) {
                 static::$storage[] = $item;
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * 保存抓取结果
+     *
+     * @return GuangzhouSpider
+     */
+    public function save(): GuangzhouSpider
+    {
+        $count = 0;
+        foreach (static::$storage as $item) {
+            ++$count;
+            $report = Report::firstOrNew([
+                'case_number' => $item['AH'],
+            ]);
+            if (!$report->id) {
+                ++$this->totalCount;
+            }
+            $report->case_account = $item['AY'];
+            $report->court = $item['FYMC'];
+            $report->court_time = $item['KTKSSJ'];
+            $report->court_address = $item['KTDD'];
+            $report->court_judge = $item['KTZSFG'];
+            $report->report_url = self::SPIDER_HTTP_HOST."data//front/fyggFront!ktggDetail.action?id=".$item['KTZSFG'];
+            $report->save();
+            $this->show_status($count,count(static::$storage),'正在存储至数据库','本次共保存开庭报告数据'.$this->totalCount.'条。');
         }
 
         return $this;

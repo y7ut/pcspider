@@ -1,26 +1,30 @@
 <?php
-
-namespace App\Commands;
-
-use App\Spider\DemoSpider;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
- * Created by PhpStorm.
+ * 广州产权法院抓取Command
  * User: YiChu
  * Date: 2019/4/22
  * Time: 11:12
  */
-class GuangZhouCourt extends Command
+
+namespace App\Commands;
+
+use App\Spider\GuangzhouSpider;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+
+class GuangzhouCourt extends Command
 {
+    protected $spider;
+
     /**
      * 构造函数
      */
     public function __construct()
     {
         parent:: __construct();
+        $this->spider = GuangzhouSpider::setup();
     }
 
     protected function configure()
@@ -33,6 +37,6 @@ class GuangZhouCourt extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        DemoSpider::setup()->run()->save()->dd($output);
+        $this->spider->run()->save();
     }
 }

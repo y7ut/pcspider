@@ -12,7 +12,8 @@
         "symfony/console": "^4.2",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/database": "^5.8",
-        "monolog/monolog": "^1.24"
+        "monolog/monolog": "^1.24",
+        "jaeger/querylist": "^4.1"
     },
     "scripts": {
         "fix": "php-cs-fixer fix --diff"
