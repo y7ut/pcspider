@@ -73,7 +73,6 @@ class ShanghaiSpider extends BaseSpider
             })->toArray());
         }
 
-//        var_dump($firstData);
         return $this;
     }
 
@@ -88,21 +87,44 @@ class ShanghaiSpider extends BaseSpider
         foreach (static::$storage as $item) {
             ++$count;
             $report = Report::firstOrNew([
-                'case_number' => $item['AH'],
+                'case_number' => $item['案号'],
             ]);
             if (!$report->id) {
                 ++$this->totalCount;
             }
-            $report->case_account = $item['AY'];
-            $report->court = $item['FYMC'];
-            $report->court_time = $item['KTKSSJ'];
-            $report->court_address = $item['KTDD'];
-            $report->court_judge = $item['KTZSFG'];
-            $report->report_url = self::SPIDER_HTTP_HOST."data//front/fyggFront!ktggDetail.action?id=".$item['KTZSFG'];
+            $report->case_account = $item['案由'];
+            $report->court = $item['法庭'];
+            $report->court_time = $this->makeTimeFormat($item['开庭日期']);
+            $report->court_address = $item['承办部门'];
+            $report->court_judge = $item["审判长/主审人"];
+            $report->indicter = $item["原告/上诉人"];
+            $report->accused = $item["被告/被上诉人"];
+            $report->report_url = '';
             $report->save();
             $this->show_status($count,count(static::$storage),'正在存储至数据库','本次共保存开庭报告数据'.$this->totalCount.'条。');
         }
 
         return $this;
+    }
+
+    /**
+     * 转换日期格式
+     *
+     * @param $pageText
+     * @return string
+     */
+    public function makeTimeFormat($pageText){
+        preg_match_all('/\d+/',$pageText,$page);
+
+        if(substr($pageText,strpos($pageText,'日')+3,6) == '上午'){
+            echo '上午';
+            return $page[0][0].'-'.$page[0][1].'-'.$page[0][2].' '.$page[0][3].':'.$page[0][4].':00';
+        }else{
+            if($page[0][3] >= 12 ){
+                return $page[0][0].'-'.$page[0][1].'-'.$page[0][2].' '.($page[0][3]).':'.$page[0][4].':00';
+            }
+            return $page[0][0].'-'.$page[0][1].'-'.$page[0][2].' '.($page[0][3]+12).':'.$page[0][4].':00';
+        }
+
     }
 }

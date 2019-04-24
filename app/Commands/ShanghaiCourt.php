@@ -37,6 +37,6 @@ class ShanghaiCourt extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->spider->run()->dd($output);
+        $this->spider->run()->save();
     }
 }
