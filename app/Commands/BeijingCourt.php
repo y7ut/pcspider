@@ -15,27 +15,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BeijingCourt extends Command
 {
-    protected $spider;
-
     /**
      * 构造函数
      */
     public function __construct()
     {
         parent:: __construct();
-        $this->spider = BeijingSpider::setup();
     }
 
     protected function configure(): void
     {
         $this
-            ->setName('spider:shanghaispider')
-            ->setDescription('北京知识产权法院')
-            ->setHelp('获取北京知识产权法院的开庭报告信息');
+            ->setName('spider:beijingspider')
+            ->setDescription('Beijing Intellectual Property Court')
+            ->setHelp('获取北京知识产权法院的开庭报告信息 ');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $this->spider->run()->save();
+        BeijingSpider::setup()->run()->save();
     }
 }

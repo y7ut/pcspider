@@ -15,27 +15,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GuangzhouCourt extends Command
 {
-    protected $spider;
-
     /**
      * 构造函数
      */
     public function __construct()
     {
         parent:: __construct();
-        $this->spider = GuangzhouSpider::setup();
+
     }
 
     protected function configure()
     {
         $this
             ->setName('spider:guangzhoucourt')
-            ->setDescription('广州知识产权法院')
+            ->setDescription('Guangzhou Intellectual Property Court')
             ->setHelp('获取广州知识产权法院的开庭报告信息');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->spider->run()->save();
+        GuangzhouSpider::setup()->run()->save();
     }
 }

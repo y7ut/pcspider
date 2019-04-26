@@ -5,6 +5,8 @@
  * Date: 2019/4/22
  * Time: 11:37
  */
+
+use App\Commands\BeijingCourt;
 use App\Commands\GuangzhouCourt;
 use App\Commands\ShanghaiCourt;
 use Symfony\Component\Console\Application;
@@ -30,3 +32,4 @@ $application = new Application();
 //注册命令
 $application->add(new GuangzhouCourt());
 $application->add(new ShanghaiCourt());
+$application->add(new BeijingCourt());
