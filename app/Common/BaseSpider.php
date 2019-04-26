@@ -63,53 +63,57 @@ class BaseSpider
     /**
      * 操作进度条
      *
-     * @param int $done
-     * @param int $total
+     * @param int    $done
+     * @param int    $total
      * @param string $doing
      * @param string $show
-     * @param int $size
+     * @param int    $size
      */
-    function show_status(int $done,int $total,string $doing,string $show, $size=50) {
-
+    public function show_status(int $done, int $total, string $doing, string $show, $size = 50)
+    {
         static $start_time;
 
         // if we go over our bound, just ignore it
-        if($done > $total) return;
-
-        if(empty($start_time)) $start_time=time();
-        $now = time();
-
-        $perc=(double)($done/$total);
-
-        $bar=floor($perc*$size);
-
-        $status_bar="\r[";
-        $status_bar.=str_repeat("=", $bar);
-        if($bar<$size){
-            $status_bar.=">";
-            $status_bar.=str_repeat(" ", $size-$bar);
-        } else {
-            $status_bar.="=";
+        if ($done > $total) {
+            return;
         }
 
-        $disp=number_format($perc*100, 0);
+        if (empty($start_time)) {
+            $start_time = time();
+        }
+        $now = time();
 
-        $status_bar.="] $disp%  $done/$total";
+        $perc = (float) ($done / $total);
 
-        $rate = ($now-$start_time)/$done;
+        $bar = floor($perc * $size);
+
+        $status_bar = "\r[";
+        $status_bar .= str_repeat('=', $bar);
+        if ($bar < $size) {
+            $status_bar .= '>';
+            $status_bar .= str_repeat(' ', $size - $bar);
+        } else {
+            $status_bar .= '=';
+        }
+
+        $disp = number_format($perc * 100, 0);
+
+        $status_bar .= "] $disp%  $done/$total";
+
+        $rate = ($now - $start_time) / $done;
         $left = $total - $done;
         $eta = round($rate * $left, 2);
 
         $elapsed = $now - $start_time;
 
-        $status_bar.= $doing." 剩余: ".number_format($eta)." sec.  爬取已进行: ".number_format($elapsed)." sec.";
+        $status_bar .= $doing.' 剩余: '.number_format($eta).' sec.  爬取已进行: '.number_format($elapsed).' sec.';
 
         echo "$status_bar  ";
 
         flush();
 
         // when done, send a newline
-        if($done == $total) {
+        if ($done == $total) {
             echo "\n";
             echo "$show\n";
         }

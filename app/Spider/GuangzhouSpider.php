@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 广州知识产权法院的抓取爬虫
  * User: YiChu
  * Date: 2019/4/19
  * Time: 18:47
@@ -44,7 +44,7 @@ class GuangzhouSpider extends BaseSpider
         $page = $data['pageCount'];
 
         for ($i = 2; $i <= $page; ++$i) {
-            $this->show_status($i,$page,'获取公告目录成功，开始尝试读取','');
+            $this->show_status($i, $page, '获取公告目录成功，开始尝试读取', '');
             $response = static::$httpClient->request('GET', 'data/front/fyggFront!ktggListAjax.action', [
                 'query' => [
                     'pageNo' => $i,
@@ -82,9 +82,9 @@ class GuangzhouSpider extends BaseSpider
             $report->court_time = $item['KTKSSJ'];
             $report->court_address = $item['KTDD'];
             $report->court_judge = $item['KTZSFG'];
-            $report->report_url = self::SPIDER_HTTP_HOST."data//front/fyggFront!ktggDetail.action?id=".$item['KTZSFG'];
+            $report->report_url = self::SPIDER_HTTP_HOST.'data//front/fyggFront!ktggDetail.action?id='.$item['KTZSFG'];
             $report->save();
-            $this->show_status($count,count(static::$storage),'正在存储至数据库','本次共保存开庭报告数据'.$this->totalCount.'条。');
+            $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');
         }
 
         return $this;
