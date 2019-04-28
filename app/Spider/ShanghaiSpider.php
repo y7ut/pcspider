@@ -14,7 +14,7 @@ use QL\QueryList;
 
 class ShanghaiSpider extends BaseSpider
 {
-    public const SPIDER_HTTP_HOST = 'http://www.shzcfy.gov.cn/';
+    public const SPIDER_HTTP_HOST = 'http://www.shzcfy.gov.cn';
 
     public const SPIDER_NAME = 'ShanghaiSpider';
 
@@ -31,7 +31,7 @@ class ShanghaiSpider extends BaseSpider
             throw new \RuntimeException('Please setup Spider first');
         }
 
-        $firstResponse = static::$httpClient->request('GET', 'ktgg.jhtml', [
+        $firstResponse = static::$httpClient->request('GET', '/ktgg.jhtml', [
             'query' => [
                 'lmdm' => 'ktgg',
                 'ds_p' => 1,
@@ -56,7 +56,7 @@ class ShanghaiSpider extends BaseSpider
 
         for ($i = 2; $i <= $maxPage; ++$i) {
             $this->show_status($i, $maxPage, '获取公告目录成功，开始尝试读取', '');
-            $firstResponse = static::$httpClient->request('GET', 'ktgg.jhtml', [
+            $firstResponse = static::$httpClient->request('GET', '/ktgg.jhtml', [
                 'query' => [
                     'lmdm' => 'ktgg',
                     'ds_p' => $i,
