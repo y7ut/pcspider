@@ -98,37 +98,72 @@ class BeijingSpider extends BaseSpider
             $content = $ql->rules(['contents' => ['.text>p', 'text']])->queryData();
 
             //拼装每个公告的信息
-            $courtString = $content[3]['contents'];
-            $court['case_number'] = $content[2]['contents'];
+            if(isset($content[3]['contents'])){
+                $courtString = $content[3]['contents'];
+                $court['court_time'] = $this->makeTimeFormat(substr($courtString, strpos($courtString, '定于') + 6, 55));
+                $court['court_address'] = substr($courtString, strpos($courtString, '本院') + 6, (strpos($courtString, '依法') - strpos($courtString, '本院') - 6));
+                $court['indicter'] = substr($courtString, strpos($courtString, '审理') + 6, (strpos($courtString, '与') - strpos($courtString, '审理') - 6));
+                $court['accused'] = substr($courtString, strpos($courtString, '与') + 3, (strpos($courtString, '一案') - strpos($courtString, '与') - 3));
+
+                //对不同·案由进行切割字符串 ，这个地方有待优化
+                if(substr($court['accused'],-6) == '其他'){
+                    $court['case_account'] = substr($court['accused'],-6);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'其他'));
+                }elseif (substr($court['accused'],-33) == '侵害实用新型专利权纠纷'){
+                    $court['case_account'] = substr($court['accused'],-33);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-33) == '侵害外观设计专利权纠纷'){
+                    $court['case_account'] = substr($court['accused'],-33);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-27) == '侵害发明专利权纠纷'){
+                    $court['case_account'] = substr($court['accused'],-27);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-36) == '侵害计算机软件著作权纠纷'){
+                    $court['case_account'] = substr($court['accused'],-36);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-21) == '侵害商标权纠纷'){
+                    $court['case_account'] = substr($court['accused'],-21);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-33) == '计算机软件开发合同纠纷'){
+                    $court['case_account'] = substr($court['accused'],-33);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-33) == '商标权撤销复审行政纠纷'){
+                    $court['case_account'] = substr($court['accused'],-33);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-39) == '商标权无效宣告请求行政纠纷'){
+                    $court['case_account'] = substr($court['accused'],-39);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-24) == '技术转化合同纠纷'){
+                    $court['case_account'] = substr($court['accused'],-24);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-21) == '不正当竞争纠纷'){
+                    $court['case_account'] = substr($court['accused'],-21);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-21) == '专利权权属纠纷'){
+                    $court['case_account'] = substr($court['accused'],-21);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-24) == '特许经营合同纠纷'){
+                    $court['case_account'] = substr($court['accused'],-24);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }elseif (substr($court['accused'],-24) == '专利代理合同纠纷'){
+                    $court['case_account'] = substr($court['accused'],-24);
+                    $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
+                }else{
+                    $court['case_account'] = '未提供案由';
+                }
+            }else{
+                $courtString = '源页面信息有误';
+            }
+            if(isset($content[2]['contents'])){
+                $court['case_number'] = $content[2]['contents'];
+            }else{
+                $court['case_number'] = '源页面信息有误';
+            }
             // 太快会被封啊！ 随缘睡觉法
             if (rand(1, 20000) > 10000) {
                 sleep(self::SPIDER_WAIT_TIME);
             }
-            $court['court_time'] = $this->makeTimeFormat(substr($courtString, strpos($courtString, '定于') + 6, 55));
-            $court['court_address'] = substr($courtString, strpos($courtString, '本院') + 6, (strpos($courtString, '依法') - strpos($courtString, '本院') - 6));
-            $court['indicter'] = substr($courtString, strpos($courtString, '审理') + 6, (strpos($courtString, '与') - strpos($courtString, '审理') - 6));
-            $court['accused'] = substr($courtString, strpos($courtString, '与') + 3, (strpos($courtString, '一案') - strpos($courtString, '与') - 3));
-            if(substr($court['accused'],-6) == '其他'){
-                $court['case_account'] = substr($court['accused'],-6);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'其他'));
-            }elseif (substr($court['accused'],-33) == '侵害实用新型专利权纠纷'){
-                $court['case_account'] = substr($court['accused'],-33);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
-            }elseif (substr($court['accused'],-33) == '侵害外观设计专利权纠纷'){
-                $court['case_account'] = substr($court['accused'],-33);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
-            }elseif (substr($court['accused'],-27) == '侵害发明专利权纠纷'){
-                $court['case_account'] = substr($court['accused'],-27);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
-            }elseif (substr($court['accused'],-36) == '侵害计算机软件著作权纠纷'){
-                $court['case_account'] = substr($court['accused'],-36);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
-            }elseif (substr($court['accused'],-21) == '侵害商标权纠纷'){
-                $court['case_account'] = substr($court['accused'],-21);
-                $court['accused'] = substr($court['accused'],0,strpos($court['accused'],'侵害'));
-            }else{
-                $court['case_account'] = '未提供案由';
-            }
+
             $court['report_url'] = self::SPIDER_HTTP_HOST.$item['content'];
             return $court;
         };
