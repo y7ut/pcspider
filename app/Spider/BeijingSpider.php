@@ -96,6 +96,12 @@ class BeijingSpider extends BaseSpider
             $ql = QueryList::html(strval($Response->getBody()));
             //获取详细的页面内容
             $content = $ql->rules(['contents' => ['.text>p', 'text']])->queryData();
+            //获取案号
+            if(isset($content[2]['contents'])){
+                $court['case_number'] = $content[2]['contents'];
+            }else{
+                $court['case_number'] = null;
+            }
 
             //拼装每个公告的信息
             if(isset($content[3]['contents'])){
@@ -152,13 +158,16 @@ class BeijingSpider extends BaseSpider
                     $court['case_account'] = '未提供案由';
                 }
             }else{
-                $courtString = '源页面信息有误';
+                $courtString = '源页面信息格式有误';
+                $court['case_account'] = $courtString;
+                $court['accused'] = $courtString;
+                $court['court_time'] = null;
+                $court['court_address'] = $courtString;
+                $court['indicter'] = $courtString;
+                $court['accused'] = $courtString;
+
             }
-            if(isset($content[2]['contents'])){
-                $court['case_number'] = $content[2]['contents'];
-            }else{
-                $court['case_number'] = '源页面信息有误';
-            }
+
             // 太快会被封啊！ 随缘睡觉法
             if (rand(1, 20000) > 10000) {
                 sleep(self::SPIDER_WAIT_TIME);
@@ -204,7 +213,7 @@ class BeijingSpider extends BaseSpider
         foreach (static::$storage as $item) {
             ++$count;
             if (is_null($item['case_number'])){
-                --$count;
+                $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');
                 continue;
             }
             $report = Report::firstOrNew([
@@ -215,12 +224,7 @@ class BeijingSpider extends BaseSpider
             }
             $report->case_account = $item['case_account'];
             $report->court = '北京知识产权法院';
-            if ('1970-01-01 00:00:00' === $item['court_time']){
-                --$this->totalCount;
-                continue;
-            }else{
-                $report->court_time = $item['court_time'];
-            }
+            $report->court_time = $item['court_time'];
             $report->court_address = $item['court_address'];
             $report->court_judge = '北京法院未提供主审人';
             $report->indicter = $item['indicter'];
@@ -230,6 +234,7 @@ class BeijingSpider extends BaseSpider
                 $report->save();
             }catch (\Exception $e){
                 --$this->totalCount;
+                $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');
                 continue;
             }
 

@@ -11,6 +11,7 @@ namespace App\Commands;
 use App\Spider\GuangzhouSpider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GuangzhouCourt extends Command
@@ -28,7 +29,13 @@ class GuangzhouCourt extends Command
         $this
             ->setName('spider:guangzhoucourt')
             ->setDescription('Guangzhou Intellectual Property Court')
-            ->setHelp('获取广州知识产权法院的开庭报告信息');
+            ->setHelp('获取广州知识产权法院的开庭报告信息')
+            ->addOption(
+                'dump',
+                'd',
+                InputOption::VALUE_NONE,
+                '是否输出结果在命令行中'
+            );
     }
 
     /**
@@ -38,6 +45,11 @@ class GuangzhouCourt extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        GuangzhouSpider::setup()->run()->save()->dd($output);
+        $is_dd = $input->getOption('dump');
+        if($is_dd){
+            GuangzhouSpider::setup()->run()->save()->dd($output);
+        }else{
+            GuangzhouSpider::setup()->run()->save();
+        }
     }
 }

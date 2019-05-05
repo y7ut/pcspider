@@ -11,6 +11,7 @@ namespace App\Commands;
 use App\Spider\BeijingSpider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class BeijingCourt extends Command
@@ -28,7 +29,13 @@ class BeijingCourt extends Command
         $this
             ->setName('spider:beijingspider')
             ->setDescription('Beijing Intellectual Property Court')
-            ->setHelp('获取北京知识产权法院的开庭报告信息 ');
+            ->setHelp('获取北京知识产权法院的开庭报告信息 ')
+            ->addOption(
+                'dump',
+                'd',
+                InputOption::VALUE_NONE,
+                '是否输出结果在命令行中'
+            );
     }
 
     /**
@@ -38,6 +45,12 @@ class BeijingCourt extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        BeijingSpider::setup()->run()->save();
+        $is_dd = $input->getOption('dump');
+        if($is_dd){
+            BeijingSpider::setup()->run()->save()->dd($output);
+        }else{
+            BeijingSpider::setup()->run()->save();
+        }
+
     }
 }
