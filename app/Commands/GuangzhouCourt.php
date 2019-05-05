@@ -21,7 +21,6 @@ class GuangzhouCourt extends Command
     public function __construct()
     {
         parent:: __construct();
-
     }
 
     protected function configure()
@@ -32,8 +31,13 @@ class GuangzhouCourt extends Command
             ->setHelp('获取广州知识产权法院的开庭报告信息');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        GuangzhouSpider::setup()->run()->save();
+        GuangzhouSpider::setup()->run()->save()->dd($output);
     }
 }

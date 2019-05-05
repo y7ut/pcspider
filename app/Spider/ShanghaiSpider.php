@@ -14,8 +14,18 @@ use QL\QueryList;
 
 class ShanghaiSpider extends BaseSpider
 {
+    /**
+     * 爬虫域名
+     *
+     * @var string
+     */
     public const SPIDER_HTTP_HOST = 'http://www.shzcfy.gov.cn';
 
+    /**
+     * 爬虫名字
+     *
+     * @var string
+     */
     public const SPIDER_NAME = 'ShanghaiSpider';
 
     /**
@@ -23,9 +33,9 @@ class ShanghaiSpider extends BaseSpider
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
-     * @return ShanghaiSpider
+     * @return BaseSpider
      */
-    public function run(): ShanghaiSpider
+    public function run(): BaseSpider
     {
         if (null === static::$httpClient) {
             throw new \RuntimeException('Please setup Spider first');
@@ -80,9 +90,9 @@ class ShanghaiSpider extends BaseSpider
     /**
      * 保存抓取结果
      *
-     * @return ShanghaiSpider
+     * @return BaseSpider
      */
-    public function save(): ShanghaiSpider
+    public function save(): BaseSpider
     {
         $count = 0;
         foreach (static::$storage as $item) {

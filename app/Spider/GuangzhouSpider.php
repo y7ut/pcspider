@@ -13,8 +13,18 @@ use App\Common\Model\Report;
 
 class GuangzhouSpider extends BaseSpider
 {
+    /**
+     * 爬虫域名
+     *
+     * @var string
+     */
     public const SPIDER_HTTP_HOST = 'http://www.gipc.gov.cn';
 
+    /**
+     * 爬虫名字
+     *
+     * @var string
+     */
     public const SPIDER_NAME = 'GuangzhouSpider';
 
     /**
@@ -22,9 +32,9 @@ class GuangzhouSpider extends BaseSpider
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
-     * @return GuangzhouSpider
+     * @return BaseSpider
      */
-    public function run(): GuangzhouSpider
+    public function run(): BaseSpider
     {
         if (null === static::$httpClient) {
             throw new \RuntimeException('Please setup Spider first');
@@ -64,9 +74,9 @@ class GuangzhouSpider extends BaseSpider
     /**
      * 保存抓取结果
      *
-     * @return GuangzhouSpider
+     * @return BaseSpider
      */
-    public function save(): GuangzhouSpider
+    public function save(): BaseSpider
     {
         $count = 0;
         foreach (static::$storage as $item) {

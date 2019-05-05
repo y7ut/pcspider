@@ -11,7 +11,7 @@ namespace App\Common;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BaseSpider
+abstract class BaseSpider
 {
     /**
      * 抓取爬虫名字
@@ -69,7 +69,7 @@ class BaseSpider
      * @param string $show
      * @param int    $size
      */
-    public function show_status(int $done, int $total, string $doing, string $show, $size = 50)
+    protected function show_status(int $done, int $total, string $doing, string $show, $size = 50)
     {
         static $start_time;
 
@@ -153,8 +153,25 @@ class BaseSpider
         }
         $output->writeln('----------------------');
         $output->writeln(sprintf('本次生产数据%s条', count(static::$storage)));
+
         $output->writeln(sprintf('存储新的生产数据%s条', $this->totalCount));
 
         return $this;
     }
+
+    /**
+     * 执行抓取运行操作，将每个爬虫特有的逻辑，在这个方法中体现
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @return BaseSpider
+     */
+    abstract public function run(): BaseSpider;
+
+    /**
+     * 保存抓取结果
+     *
+     * @return BaseSpider
+     */
+    abstract public function save(): BaseSpider;
 }

@@ -31,6 +31,11 @@ class BeijingCourt extends Command
             ->setHelp('获取北京知识产权法院的开庭报告信息 ');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         BeijingSpider::setup()->run()->save();

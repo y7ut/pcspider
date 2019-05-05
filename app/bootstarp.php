@@ -5,7 +5,6 @@
  * Date: 2019/4/22
  * Time: 11:37
  */
-
 use App\Commands\BeijingCourt;
 use App\Commands\GuangzhouCourt;
 use App\Commands\ShanghaiCourt;
