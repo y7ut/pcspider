@@ -18,4 +18,14 @@ class Report extends Model
      * @var array
      */
     protected $fillable = ['case_number', 'case_account', 'court', 'court_time', 'court_address', 'court_judge', 'report_url', 'create_time', 'update_time'];
+
+
+    /**
+     * 不更新updated_at
+     *
+     * @return null|string
+     */
+    public function getUpdatedAtColumn() {
+        return null;
+    }
 }

@@ -64,16 +64,19 @@ class BeijingSpider extends BaseSpider
      */
     public function run(): BaseSpider
     {
+        //生成QL实例
+        $ql = QueryList::getInstance();
+
         if (null === static::$httpClient) {
             throw new \RuntimeException('Please setup Spider first');
         }
         $firstResponse = static::$httpClient->request('GET', sprintf(self::SPIDER_HTTP_URI, 1));
 
         //先获取首页的信息
-        $ql = QueryList::html(strval($firstResponse->getBody()));
+        $qlFirst = $ql->html(strval($firstResponse->getBody()));
 
         //从首页获取页码
-        $pageData = $ql->rules([
+        $pageData = $qlFirst->rules([
             'link' => ['.paginationControl>a:eq(5)', 'href'],
         ])->queryData();
 
@@ -85,17 +88,19 @@ class BeijingSpider extends BaseSpider
         preg_match_all('/\d+/', $maxPageNumber, $pageFromUrl);
         $maxPageNumber = $pageFromUrl[0][count($pageFromUrl[0]) - 1];
         $this->show_status(1, $maxPageNumber, '获取公告目录中', '');
+
+
+
         //获取这个页面全部的开庭信息的匿名方法
-        $doQuery = function ($item) {
+        $doQuery = function ($item) use ($ql) {
             $Response = static::$httpClient->request('GET', $item['content'], [
                 'headers' => [
                     'User-Agent' => self::SPIDER_HEADER_AGENT,
                 ],
             ]);
-            //执行QueryList
-            $ql = QueryList::html(strval($Response->getBody()));
-            //获取详细的页面内容
-            $content = $ql->rules(['contents' => ['.text>p', 'text']])->queryData();
+
+            //执行QueryList ,获取详细的页面内容
+            $content = $ql->html(strval($Response->getBody()))->rules(['contents' => ['.text>p', 'text']])->queryData();
             //获取案号
             if(isset($content[2]['contents'])){
                 $court['case_number'] = $content[2]['contents'];
@@ -178,7 +183,7 @@ class BeijingSpider extends BaseSpider
         };
 
         //获取内容，传入匿名方法
-        $pageData = $ql->rules([
+        $pageData = $qlFirst->rules([
             'content' => ['.left>a', 'href'],
         ])->query($doQuery)->getData()->toArray();
 
@@ -191,9 +196,9 @@ class BeijingSpider extends BaseSpider
             $this->show_status($i, $maxPageNumber, '获取公告目录成功，开始尝试读取', '');
             $firstResponse = static::$httpClient->request('GET', sprintf(self::SPIDER_HTTP_URI, $i));
 
-            $ql = QueryList::html(strval($firstResponse->getBody()));
+            $qlNext = $ql->html(strval($firstResponse->getBody()));
 
-            $pageData = $ql->rules([
+            $pageData = $qlNext->rules([
                 'content' => ['.left>a', 'href'],
             ])->query($doQuery)->getData()->toArray();
             static::$storage = array_merge(static::$storage, $pageData);
