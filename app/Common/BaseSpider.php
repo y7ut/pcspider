@@ -147,15 +147,39 @@ abstract class BaseSpider
      */
     public function dd(OutputInterface $output): BaseSpider
     {
+
         foreach (static::$storage as $item) {
             $output->writeln('----------------------');
             $output->writeln(json_encode($item, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         }
         $output->writeln('----------------------');
-        $output->writeln(sprintf('本次生产数据%s条', count(static::$storage)));
 
+        $output->writeln(sprintf('本次生产数据%s条', count(static::$storage)));
         $output->writeln(sprintf('存储新的生产数据%s条', $this->totalCount));
 
+        return $this;
+    }
+
+    /**
+     *保存日志
+     *
+     * @return BaseSpider
+     */
+    public function log () :BaseSpider
+    {
+        $log = fopen('./log/'.strtolower(static::SPIDER_NAME).'-'.date('Y-m-d',time()).'.log','w+');
+
+        foreach (static::$storage as $item) {
+            if(isset($item['is_new'])){
+                fwrite($log,'----------------------'.PHP_EOL);
+                fwrite($log,json_encode($item, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).PHP_EOL);
+
+            }
+        }
+        fwrite($log,'----------------------'.PHP_EOL);
+        fwrite($log,sprintf('本次生产数据%s条', count(static::$storage)).PHP_EOL);
+        fwrite($log,sprintf(sprintf('存储新的生产数据%s条', $this->totalCount)).PHP_EOL);
+        fclose($log);
         return $this;
     }
 

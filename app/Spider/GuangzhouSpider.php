@@ -79,12 +79,13 @@ class GuangzhouSpider extends BaseSpider
     public function save(): BaseSpider
     {
         $count = 0;
-        foreach (static::$storage as $item) {
+        foreach (static::$storage as $key => $item) {
             ++$count;
             $report = Report::firstOrNew([
                 'case_number' => $item['AH'],
             ]);
             if (!$report->id) {
+                static::$storage[$key]['is_new'] = 1;
                 ++$this->totalCount;
             }
             $report->case_account = $item['AY'];

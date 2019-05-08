@@ -35,6 +35,11 @@ class ShanghaiCourt extends Command
                 'd',
                 InputOption::VALUE_NONE,
                 '是否输出结果在命令行中'
+            )->addOption(
+                'log',
+                'l',
+                InputOption::VALUE_NONE,
+                '是否输出结果在日志中'
             );
     }
 
@@ -46,8 +51,11 @@ class ShanghaiCourt extends Command
     protected function execute(InputInterface $input, OutputInterface $output) : void
     {
         $is_dd = $input->getOption('dump');
+        $is_log = $input->getOption('log');
         if($is_dd){
             ShanghaiSpider::setup()->run()->save()->dd($output);
+        }elseif ($is_log){
+            ShanghaiSpider::setup()->run()->save()->log();
         }else{
             ShanghaiSpider::setup()->run()->save();
         }

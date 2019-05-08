@@ -27,7 +27,7 @@ class GuangzhouCourt extends Command
     protected function configure()
     {
         $this
-            ->setName('spider:guangzhoucourt')
+            ->setName('spider:guangzhouspider')
             ->setDescription('Guangzhou Intellectual Property Court')
             ->setHelp('获取广州知识产权法院的开庭报告信息')
             ->addOption(
@@ -35,6 +35,11 @@ class GuangzhouCourt extends Command
                 'd',
                 InputOption::VALUE_NONE,
                 '是否输出结果在命令行中'
+            )->addOption(
+                'log',
+                'l',
+                InputOption::VALUE_NONE,
+                '是否输出结果在日志中'
             );
     }
 
@@ -46,8 +51,11 @@ class GuangzhouCourt extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $is_dd = $input->getOption('dump');
+        $is_log = $input->getOption('log');
         if($is_dd){
             GuangzhouSpider::setup()->run()->save()->dd($output);
+        }elseif ($is_log){
+            GuangzhouSpider::setup()->run()->save()->log();
         }else{
             GuangzhouSpider::setup()->run()->save();
         }

@@ -215,7 +215,7 @@ class BeijingSpider extends BaseSpider
     public function save(): BaseSpider
     {
         $count = 0;
-        foreach (static::$storage as $item) {
+        foreach (static::$storage as $key=>$item) {
             ++$count;
             if (is_null($item['case_number'])){
                 $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');
@@ -225,6 +225,7 @@ class BeijingSpider extends BaseSpider
                 'case_number' => $item['case_number'],
             ]);
             if (!$report->id) {
+                static::$storage[$key]['is_new'] = 1;
                 ++$this->totalCount;
             }
             $report->case_account = $item['case_account'];

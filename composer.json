@@ -5,14 +5,13 @@
     "authors": [
         {
             "name": "谢宇轩",
-            "email": "xieyuxuan@netpas.co"
+            "email": "xieyx@lunion.com.cn"
         }
     ],
     "require": {
         "symfony/console": "^4.2",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/database": "^5.8",
-        "monolog/monolog": "^1.24",
         "jaeger/querylist": "^4.1"
     },
     "scripts": {
