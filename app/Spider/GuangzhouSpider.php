@@ -93,6 +93,7 @@ class GuangzhouSpider extends BaseSpider
             $report->court_time = $item['KTKSSJ'];
             $report->court_address = $item['KTDD'];
             $report->court_judge = $item['KTZSFG'];
+            $report->area = '广州';
             $report->report_url = self::SPIDER_HTTP_HOST.'/data//front/fyggFront!ktggDetail.action?id='.$item['KTZSFG'];
             $report->save();
             $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');

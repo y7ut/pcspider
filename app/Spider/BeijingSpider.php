@@ -234,6 +234,7 @@ class BeijingSpider extends BaseSpider
             $report->indicter = $item['indicter'];
             $report->accused = $item['accused'];
             $report->report_url = $item['report_url'];
+            $report->area = '北京';
             try {
                 $report->save();
             } catch (\Exception $e) {

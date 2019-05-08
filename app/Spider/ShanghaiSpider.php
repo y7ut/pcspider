@@ -112,6 +112,7 @@ class ShanghaiSpider extends BaseSpider
             $report->indicter = $item['原告/上诉人'];
             $report->accused = $item['被告/被上诉人'];
             $report->report_url = '';
+            $report->area = '上海';
             $report->save();
             $this->show_status($count, count(static::$storage), '正在存储至数据库', '本次共保存开庭报告数据'.$this->totalCount.'条。');
         }
