@@ -44,21 +44,21 @@ class BeijingCourt extends Command
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $is_dd = $input->getOption('dump');
         $is_log = $input->getOption('log');
-        if($is_dd){
+        if ($is_dd) {
             BeijingSpider::setup()->run()->save()->dd($output);
-        }elseif ($is_log){
+        } elseif ($is_log) {
             BeijingSpider::setup()->run()->save()->log();
-        }else{
+        } else {
             BeijingSpider::setup()->run()->save();
         }
-
     }
 }

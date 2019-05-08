@@ -95,7 +95,7 @@ class ShanghaiSpider extends BaseSpider
     public function save(): BaseSpider
     {
         $count = 0;
-        foreach (static::$storage as $key=>$item) {
+        foreach (static::$storage as $key => $item) {
             ++$count;
             $report = Report::firstOrNew([
                 'case_number' => $item['案号'],
@@ -131,7 +131,6 @@ class ShanghaiSpider extends BaseSpider
         preg_match_all('/\d+/', $pageText, $page);
 
         if ('上午' == substr($pageText, strpos($pageText, '日') + 3, 6)) {
-
             return $page[0][0].'-'.$page[0][1].'-'.$page[0][2].' '.$page[0][3].':'.$page[0][4].':00';
         } else {
             if ($page[0][3] >= 12) {
