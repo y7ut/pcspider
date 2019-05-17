@@ -20,11 +20,11 @@ return [
         'db' => [
             'default' => [
                 'driver' => 'mysql',
-                'host' => '47.106.69.239',
+                'host' => '172.18.172.158',
                 'port' => 3306,
                 'database' => 'jiwei',
                 'username' => 'work',
-                'password' => 'MDa61Obr8EE6ASnl',
+                'password' => 'pMDa61Obr8EE6ASnl',
                 'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'timezone' => '+08:00',

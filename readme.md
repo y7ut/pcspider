@@ -10,6 +10,12 @@ This is a PHP crawler project that crawls court reports and referee documents fr
 
 ### 使用说明 
 
+#### 安装
+
+使用`composer install`安装依赖 
+
+#### 使用
+
 整个应用使用 `symfony/console` 构建，入口文件为 `public/index.php` ， 通过命令还来启动数据获取程序。
 
 
