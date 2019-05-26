@@ -15,16 +15,33 @@ define('APP_STAGE', 'dev');
 define('DEBUG', true);
 
 // 返回的配置
+//return [
+//    'settings' => [
+//        'db' => [
+//            'default' => [
+//                'driver' => 'mysql',
+//                'host' => '172.18.172.158',
+//                'port' => 3306,
+//                'database' => 'jiwei',
+//                'username' => 'jiweiscript',
+//                'password' => 'Jt09Tdiv3BB2KLyW',
+//                'charset' => 'utf8',
+//                'collation' => 'utf8_unicode_ci',
+//                'timezone' => '+08:00',
+//            ],
+//        ],
+//    ],
+//];
 return [
     'settings' => [
         'db' => [
             'default' => [
                 'driver' => 'mysql',
-                'host' => '172.18.172.158',
+                'host' => '127.0.0.1',
                 'port' => 3306,
-                'database' => 'jiwei',
-                'username' => 'jiweiscript',
-                'password' => 'Jt09Tdiv3BB2KLyW',
+                'database' => 'dev',
+                'username' => 'root',
+                'password' => '',
                 'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'timezone' => '+08:00',
