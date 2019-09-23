@@ -56,7 +56,7 @@ class ShanghaiCourt extends Command
         if ($is_dd) {
             ShanghaiSpider::setup()->run()->save()->dd($output);
         } elseif ($is_log) {
-            ShanghaiSpider::setup()->run()->save()->log();
+            ShanghaiSpider::setup()->run()->save()->dd($output)->log();
         } else {
             ShanghaiSpider::setup()->run()->save();
         }

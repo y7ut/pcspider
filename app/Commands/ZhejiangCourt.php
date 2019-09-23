@@ -1,21 +1,22 @@
 <?php
 /**
- * 广州产权法院抓取Command
- * User: YiChu
- * Date: 2019/4/22
- * Time: 11:12
+ * 浙江法院抓取Command
+ * User: Yichu
+ * Date: 2019/9/23
+ * Time: 10:13
  */
 
 namespace App\Commands;
 
-use App\Spider\GuangzhouSpider;
+use App\Spider\ZhejiangSpider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GuangzhouCourt extends Command
+class ZhejiangCourt extends Command
 {
+
     /**
      * 构造函数
      */
@@ -24,12 +25,15 @@ class GuangzhouCourt extends Command
         parent:: __construct();
     }
 
-    protected function configure()
+    /**
+     *
+     */
+    protected function configure(): void
     {
         $this
-            ->setName('spider:guangzhouspider')
-            ->setDescription('Guangzhou Intellectual Property Court')
-            ->setHelp('获取广州知识产权法院的开庭报告信息')
+            ->setName('spider:zhejiangspider')
+            ->setDescription('Zhejiang Intellectual Property Court')
+            ->setHelp('获取浙江法院的开庭报告信息 ')
             ->addOption(
                 'dump',
                 'd',
@@ -44,7 +48,7 @@ class GuangzhouCourt extends Command
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -54,11 +58,11 @@ class GuangzhouCourt extends Command
         $is_dd = $input->getOption('dump');
         $is_log = $input->getOption('log');
         if ($is_dd) {
-            GuangzhouSpider::setup()->run()->save()->dd($output);
+            ZhejiangSpider::setup()->run()->save()->dd($output);
         } elseif ($is_log) {
-            GuangzhouSpider::setup()->run()->save()->dd($output)->log();
+            ZhejiangSpider::setup()->run()->log();
         } else {
-            GuangzhouSpider::setup()->run()->save();
+            ZhejiangSpider::setup()->run()->save();
         }
     }
 }

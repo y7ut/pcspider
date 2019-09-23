@@ -14,17 +14,17 @@ define('APP_STAGE', 'dev');
 // 调试模式，主要用于控制日志等级和是否输出错误信息。
 define('DEBUG', true);
 
-// 返回的配置
+//// 返回的配置
 //return [
 //    'settings' => [
 //        'db' => [
 //            'default' => [
 //                'driver' => 'mysql',
-//                'host' => '172.18.172.158',
+//                'host' => '47.106.69.239',
 //                'port' => 3306,
 //                'database' => 'jiwei',
-//                'username' => 'jiweiscript',
-//                'password' => 'Jt09Tdiv3BB2KLyW',
+//                'username' => 'work',
+//                'password' => 'MDa61Obr8EE6ASnl',
 //                'charset' => 'utf8',
 //                'collation' => 'utf8_unicode_ci',
 //                'timezone' => '+08:00',
@@ -39,7 +39,7 @@ return [
                 'driver' => 'mysql',
                 'host' => '127.0.0.1',
                 'port' => 3306,
-                'database' => 'dev',
+                'database' => 'jiwei',
                 'username' => 'root',
                 'password' => '',
                 'charset' => 'utf8',

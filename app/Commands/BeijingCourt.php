@@ -56,7 +56,7 @@ class BeijingCourt extends Command
         if ($is_dd) {
             BeijingSpider::setup()->run()->save()->dd($output);
         } elseif ($is_log) {
-            BeijingSpider::setup()->run()->save()->log();
+            BeijingSpider::setup()->run()->save()->dd($output)->log();
         } else {
             BeijingSpider::setup()->run()->save();
         }

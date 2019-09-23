@@ -32,3 +32,4 @@ $application = new Application();
 $application->add(new GuangzhouCourt());
 $application->add(new ShanghaiCourt());
 $application->add(new BeijingCourt());
+$application->add(new \App\Commands\ZhejiangCourt());
