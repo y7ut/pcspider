@@ -60,7 +60,7 @@ class ZhejiangCourt extends Command
         if ($is_dd) {
             ZhejiangSpider::setup()->run()->save()->dd($output);
         } elseif ($is_log) {
-            ZhejiangSpider::setup()->run()->log();
+            ZhejiangSpider::setup()->run()->save()->dd($output)->log();
         } else {
             ZhejiangSpider::setup()->run()->save();
         }
