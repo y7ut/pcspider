@@ -11,7 +11,7 @@
     "require": {
         "symfony/console": "^4.2",
         "guzzlehttp/guzzle": "^6.3",
-        "illuminate/database": "^5.8",
+        "illuminate/database": "^6.20",
         "jaeger/querylist": "^4.1"
     },
     "scripts": {
